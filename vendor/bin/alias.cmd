@@ -2,7 +2,7 @@
 
 
 if "%ALIASES%" == "" (
-  set ALIASES="%CMDER_ROOT%\config\user-aliases.cmd"
+  set ALIASES="%CMDER_ROOT%\config\user_aliases.cmd"
 )
 
 setlocal enabledelayedexpansion
@@ -40,7 +40,7 @@ goto parseargument
   ) else if "%currentarg%" neq "" (
     if "%~2" equ "" (
       :: Show the specified alias
-      doskey /macros | findstr /b %currentarg%= && exit /b
+      doskey /macros | %WINDIR%\System32\findstr /b %currentarg%= && exit /b
       echo insufficient parameters.
       goto :p_help
     ) else (
@@ -50,7 +50,7 @@ goto parseargument
   )
 rem #endregion parseargument
 
-if "%ALIASES%" neq "%CMDER_ROOT%\config\user-aliases.cmd" (
+if "%ALIASES%" neq "%CMDER_ROOT%\config\user_aliases.cmd" (
   set _x=!_x:/f "%ALIASES%" =!
 
   if not exist "%ALIASES%" (
@@ -85,7 +85,7 @@ if not ["%_temp%"] == ["%alias_name%"] (
 )
 
 :: replace already defined alias
-findstr /b /v /i "%alias_name%=" "%ALIASES%" >> "%ALIASES%.tmp"
+%WINDIR%\System32\findstr /b /v /i "%alias_name%=" "%ALIASES%" >> "%ALIASES%.tmp"
 echo %alias_name%=%alias_value% >> "%ALIASES%.tmp" && type "%ALIASES%.tmp" > "%ALIASES%" & @del /f /q "%ALIASES%.tmp"
 doskey /macrofile="%ALIASES%"
 endlocal
@@ -93,7 +93,7 @@ exit /b
 
 :p_del
 set del_alias=%~1
-findstr /b /v /i "%del_alias%=" "%ALIASES%" >> "%ALIASES%.tmp"
+%WINDIR%\System32\findstr /b /v /i "%del_alias%=" "%ALIASES%" >> "%ALIASES%.tmp"
 type "%ALIASES%".tmp > "%ALIASES%" & @del /f /q "%ALIASES%.tmp"
 doskey %del_alias%=
 doskey /macrofile="%ALIASES%"
@@ -105,7 +105,7 @@ echo Aliases reloaded
 exit /b
 
 :p_show
-doskey /macros|findstr /v /r "^;=" | sort
+doskey /macros|%WINDIR%\System32\findstr /v /r "^;=" | sort
 exit /b
 
 :p_help
@@ -117,9 +117,9 @@ echo.Options:
 echo.
 echo.     /d [alias]     Delete an [alias].
 echo.     /f [macrofile] Path to the [macrofile] you want to store the new alias in.
-echo.                    Default: %cmder_root%\config\user-aliases.cmd
+echo.                    Default: %cmder_root%\config\user_aliases.cmd
 echo.     /reload        Reload the aliases file.  Can be used with /f argument.
-echo.                    Default: %cmder_root%\config\user-aliases.cmd
+echo.                    Default: %cmder_root%\config\user_aliases.cmd
 echo.
 echo.	If alias is called with no parameters, it will display the list of existing aliases.
 echo.
