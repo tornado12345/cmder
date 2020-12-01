@@ -1,9 +1,85 @@
 # Change Log
 
-## [Unreleased]
+## [1.3.16](https://github.com/cmderdev/cmder/tree/v1.3.16) (2020-07-29)
 
 ### Fixes
 
+* Merge pull request #2357 from FloSchwalm/fix-git-version-comparison  [Dax T Games]                                                                   
+* Merge pull request #2339 from daxgames/fix_global_vars_vscode_err  [Dax T Games]                                                                     
+
+### Changes
+
+* Merge pull request #2358 from FloSchwalm/update-to-git-2.28  [Dax T Games]               
+                                                                                                                                                                          
+## [1.3.15](https://github.com/cmderdev/cmder/tree/v1.3.15) (2020-06-26)
+
+* Fixes #2247, fixes #2254 [#2265](https://github.com/cmderdev/cmder/pull/2265)
+* Clink path get broken if clink-completions content is created in a different order #2278Clink path get broken if clink-completions content is created in a different order [#2278](https://github.com/cmderdev/cmder/pull/2278)
+* Move Git functions to `lib/git.bat` [#2293](https://github.com/cmderdev/cmder/pull/2293)
+* Fix Cmder issue #2290 [#2294](https://github.com/cmderdev/cmder/pull/2294)
+* Update git for windows to 2.26.2 [#2308](https://github.com/cmderdev/cmder/pull/2308)
+* Update README.md #2323Update README.md [#2323](https://github.com/cmderdev/cmder/pull/2323)
+* Added support for setting custom icons for Cmder window [#2335](https://github.com/cmderdev/cmder/pull/2335)
+* Fix and enhance enhance_path_recursive [#2311](https://github.com/cmderdev/cmder/pull/2311)
+
+## [1.3.14](https://github.com/cmderdev/cmder/tree/v1.3.14) (2020-01-08)
+
+### Fixes
+
+* Pull Request: [#2222](https://github.com/cmderdev/cmder/pull/2222)
+  * Cmder v1.3.13 init script fails. [#2218](https://github.com/cmderdev/cmder/issues/2218)
+  * Git & env related error messages. [#2220](https://github.com/cmderdev/cmder/issues/2220)
+  * Latest addition of "--nolog" clink breaks cmd prompts. [#2166](https://github.com/cmderdev/cmder/issues/2166)
+  * `/nix_tools 0` should prevent adding `%GIT_INSTALL_ROOT%\mingw64\bin` to PATH. [#2214](https://github.com/cmderdev/cmder/issues/2214)
+
+### Changes
+
+* Update Git for Windows to 2.24.1.windows.2
+  * Pull Request: [#2237](https://github.com/cmderdev/cmder/pull/2237)
+* Update clink-completions to 0.3.5
+  * Pull Request: [#2223](https://github.com/cmderdev/cmder/pull/2223)
+
+## [1.3.13](https://github.com/cmderdev/cmder/tree/v1.3.13) (2019-11-03)
+
+### Changes
+
+* Update to Conemu 19.10.12
+
+### Adds
+
+* #2197, #1364, #447 Add ability to disable git status either globally or for individual repos.
+  * To disable git status globally add the following to `~/.gitconfig` or locally for a single repo `[repo]/.git/config`:
+
+    ```
+    [cmder]
+      status = false
+    ```
+
+* #2174 `--` Syntax to pass command line options to Conemu.
+* Disable Clink Logging
+* Add `~` tab completion.
+
+
+### Fixes
+
+* Fix #2191: profile.ps1: CheckGit does not export $gitLoaded
+* Fix #2192: Set default prompt hooks before loading user profile
+* Fix #2097, #1899: powershell foreground color changing to green
+* Fix #1979: Update Clink Completions to 0.3.4
+* Fix #1678: Cmder corrupting path with `!` in Cmder folder path.
+
+
+## [1.3.12](https://github.com/cmderdev/cmder/tree/v1.3.12) (2019-08-19)
+
+### Fixes
+
+* Pull Request: [#2113](https://github.com/cmderdev/cmder/pull/2113)
+  * Add `vendor\bin\vscode_init.cmd` for use with Visual Studio Code
+  * Fixes [#2118](https://github.com/cmderdev/cmder/issues/2118)
+  * Fixes [#1985](https://github.com/cmderdev/cmder/issues/1985)
+* Pull Request: [#2106](https://github.com/cmderdev/cmder/pull/2106)
+  * Portable Git requires running `post-install.bat` which deletes itself when done.  This was not happening.
+  * Resolves [#2105](https://github.com/cmderdev/cmder/issues/2105) 
 * Pull Request: [#2002](https://github.com/cmderdev/cmder/pull/2002)
   * Updated the HG prompt code to use the '-ib' option to 'hg id' so the branch name is always available, regardless of the state of the working copy
 
@@ -14,6 +90,22 @@
   * Provide default settings for Clink that updates the history file in real time
     * Turn this on in existing Cmder using `clink set history_io 1`
   * Allow clink disable by setting CMDER_CLINK=0 before starting task
+* Pull Request: [#2068](https://github.com/cmderdev/cmder/pull/2068)
+  * Print Index in History Command Output.
+  * Sets default `history_expand_mode = 3` in initial Clink Settings.
+
+### Adds
+
+* Pull Request  : [#2096](https://github.com/cmderdev/cmder/pull/2096)
+  * Question issue: [#2094](https://github.com/cmderdev/cmder/issues/2094)
+  * New argument created to ConEmu forwarding arguments.
+    * Syntax: `/x [ConEmu extras arguments]`
+    *   e.g.: `Cmder.exe /x "-min -tsa"`
+
+* Pull Request: [#2072](https://github.com/cmderdev/cmder/pull/2072)
+  * New alias create [alias] [alias command] syntax
+    * Based on [#1750](https://github.com/cmderdev/cmder/pull/1750)
+    * Syntax: `alias create [alias] [alias command]`
 
 ## [1.3.11](https://github.com/cmderdev/cmder/tree/v1.3.11) (2018-12-22)
 

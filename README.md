@@ -23,18 +23,28 @@ The Cmder's user interface is also designed to be more eye pleasing, and you can
 ### Shared Cmder install with Non-Portable Individual User Config
 1. Download the [latest release](https://github.com/cmderdev/cmder/releases/)
 2. Extract the archive to a shared location.
-3. (optional) Place your own executable files into the `%cmder_root%\bin` folder to be injected into your PATH.
-4. (optional) Create `%userprofile%\cmder_config\bin` folder to be injected into individual users PATH.  Default is to auto create this on first run.
-5. (optional) Place your own executable files into the `%userprofile%\cmder_config\bin` folder to be injected into your PATH.
-6. Run `Cmder.exe` with `/C` command line argument. Example: `cmder.exe /C %userprofile%\cmder_config`
+3. (optional) Place your own executable files and custom app folders into the `%cmder_root%\bin`. See: [bin/README.md](./bin/Readme.md)
+   - This folder to be injected into your PATH by default.
+   - See `/max_depth [1-5]` in 'Command Line Arguments for `init.bat`' table to add subdirectories recursively.
+4. (optional) Place your own custom app folders into the `%cmder_root%\opt`. See: [opt/README.md](./opt/Readme.md)
+   - This folder will NOT be injected into your PATH so you have total control of what gets added.
+5. Run `Cmder.exe` with `/C` command line argument. Example: `cmder.exe /C %userprofile%\cmder_config`
    * This will create the following directory structure if it is missing.
 
      ```
      c:\users\[username]\cmder_config
      ├───bin
-     └───config
-         └───profile.d
+     ├───config
+     │   └───profile.d
+     └───opt
      ```
+
+  - (optional) Place your own executable files and custom app folders into `%userprofile%\cmder_config\bin`.
+    - This folder to be injected into your PATH by default.
+    - See `/max_depth [1-5]` in 'Command Line Arguments for `init.bat`' table to add subdirectories recursively.
+  - (optional) Place your own custom app folders into the `%user_profile%\cmder_config\opt`.
+    - This folder will NOT be injected into your PATH so you have total control of what gets added.
+
 
 * Both the shared install and the individual user config locations can contain a full set of init and profile.d scripts enabling shared config with user overrides.  See below.
 
@@ -50,6 +60,7 @@ The Cmder's user interface is also designed to be more eye pleasing, and you can
 | `/SINGLE`                 | Start Cmder in single mode.                                                              |
 | `/START [start_path]`     | Folder path to start in.                                                                 |
 | `/TASK [task_name]`       | Task to start after launch.                                                              |
+| `/X [ConEmu extras pars]` | Forwads parameters to ConEmu                                                             |
 
 ## Context Menu Integration
 
@@ -91,8 +102,8 @@ _(Some shortcuts are not yet documented, though they exist - please document the
 ### Access to multiple shells in one window using tabs
 You can open multiple tabs each containing one of the following shells:
 
-| Task                | Shell          | Description                                                                                                  |
-| ----                | -----          | -----------                                                                                                  |
+| Task                | Shell            | Description                                                                                                  |
+| ----                | -----            | -----------                                                                                                  |
 | Cmder               | `cmd.exe`        | Windows `cmd.exe` shell enhanced with Git, Git aware prompt, Clink (GNU Readline), and Aliases.              |
 | Cmder as Admin      | `cmd.exe`        | Administrative Windows `cmd.exe` Cmder shell.                                                                |
 | PowerShell          | `powershell.exe` | Windows PowerShell enhanced with Git and Git aware prompt .                                                  |
@@ -123,7 +134,7 @@ cd mintty-colors-solarized/
 echo source \$CMDER_ROOT/vendor/mintty-colors-solarized/mintty-solarized-dark.sh>>$CMDER_ROOT/config/user_profile.sh
 ```
 
-You may find some Monokai color schemes for mintty to match Cmder [here](https://github.com/PhilipDaniels/mintty/blob/master/themes/Monokai) or [here](https://github.com/oumu/mintty-color-schemes/blob/master/base16-monokai-mod.minttyrc).
+You may find some Monokai color schemes for mintty to match Cmder [here](https://github.com/oumu/mintty-color-schemes/blob/master/base16-monokai-mod.minttyrc).
 
 ### Changing Cmder Default `cmd.exe` Shell Startup Behaviour Using Task Arguments
 
@@ -146,12 +157,13 @@ You may find some Monokai color schemes for mintty to match Cmder [here](https:/
 | `/c [user cmder root]`          | Enables user bin and config folders for 'Cmder as admin' sessions due to non-shared environment.                                                   | not set                                |
 | `/d`                            | Enables debug output.                                                                                                                              | not set                                |
 | `/f`                            | Enables Cmder Fast Init Mode. This disables some features, see pull request [#1492](https://github.com/cmderdev/cmder/pull/1942) for more details. | not set                                |
+| `/t`                            | Enables Cmder Timed Init Mode. This displays the time taken run init scripts | not set                                |
 | `/git_install_root [file path]` | User specified Git installation root path.                                                                                                         | `%CMDER_ROOT%\vendor\Git-for-Windows`  |
 | `/home [home folder]`           | User specified folder path to set `%HOME%` environment variable.                                                                                   | `%userprofile%`                        |
 | `/max_depth [1-5]`              | Define max recurse depth when adding to the path for `%cmder_root%\bin` and `%cmder_user_bin%`                                                     | 1                                      |
 | `/nix_tools [0-2]`              | Define how `*nix` tools are added to the path.  Prefer Windows Tools: 1, Prefer *nix Tools: 2, No `/usr/bin` in `%PATH%`: 0                        | 1                                      |
 | `/svn_ssh [path to ssh.exe]`    | Define `%SVN_SSH%` so we can use git svn with ssh svn repositories.                                                                                | `%GIT_INSTALL_ROOT%\bin\ssh.exe`       |
-| `/user_aliases [file path]`     | File path pointing to user aliases.                                                                                                                | `%CMDER_ROOT%\config\user-aliases.cmd` |
+| `/user_aliases [file path]`     | File path pointing to user aliases.                                                                                                                | `%CMDER_ROOT%\config\user_aliases.cmd` |
 | `/v`                            | Enables verbose output.                                                                                                                            | not set                                |
 | (custom arguments)              | User defined arguments processed by `cexec`. Type `cexec /?` for more useage.                                                                      | not set                                |
 
@@ -162,32 +174,46 @@ Single user portable configuration is possible using the cmder specific shell co
 | ------------- | ----------------------------------------- |
 | Cmder         | `%CMDER_ROOT%\config\user_profile.cmd`    |
 | PowerShell    | `$ENV:CMDER_ROOT\config\user_profile.ps1` |
-| Bash/Mintty   | `$CMDER_ROOT/config/user_profile.sh`        |
+| Bash/Mintty   | `$CMDER_ROOT/config/user_profile.sh`      |
 
 Note: Bash and Mintty sessions will also source the `$HOME/.bashrc` file if it exists after it sources `$CMDER_ROOT/config/user_profile.sh`.
 
 You can write `*.cmd|*.bat`, `*.ps1`, and `*.sh` scripts and just drop them in the `%CMDER_ROOT%\config\profile.d` folder to add startup config to Cmder.
 
-| Shell         | Cmder `Profile.d` Scripts                         |
-| ------------- | --------------------------------------------------|
-| Cmder         | `%CMDER_ROOT%\config\profile.d\*.bat and *.cmd` |
-| PowerShell    | `$ENV:CMDER_ROOT\config\profile.d\*.ps1`        |
-| Bash/Mintty   | `$CMDER_ROOT/config/profile.d/*.sh`                 |
+| Shell         | Cmder `Profile.d` Scripts                          |
+| ------------- | -------------------------------------------------- |
+| Cmder         | `%CMDER_ROOT%\config\profile.d\*.bat and *.cmd`    |
+| PowerShell    | `$ENV:CMDER_ROOT\config\profile.d\*.ps1`           |
+| Bash/Mintty   | `$CMDER_ROOT/config/profile.d/*.sh`                |
+
+#### Git Status Opt-Out
+
+ To disable Cmder prompt git status globally add the following to `~/.gitconfig` or locally for a single repo `[repo]/.git/config` and start a new session.
+
+ *Note: This configuration is not portable*
+
+ ```
+ [cmder]
+   status = false      # Opt out of Git status for 'ALL' Cmder supported shells.
+   cmdstatus = false   # Opt out of Git status for 'Cmd.exe' shells.
+   psstatus = false    # Opt out of Git status for 'Powershell.exe and 'Pwsh.exe' shells.
+   shstatus = false    # Opt out of Git status for 'bash.exe' shells.
+ ```
 
 ### Aliases
 #### Cmder(`Cmd.exe`) Aliases
 You can define simple aliases for `cmd.exe` sessions with a command like `alias name=command`.  Cmd.exe aliases support optional parameters through the `$1-9` or the `$*` special characters so the alias `vi=vim.exe $*` typed as `vi [filename]` will open `[filename]` in `vim.exe`.
 
-Cmd.exe aliases can also be more complex. See: [DOSKEY.EXE documentation](http://www.microsoft.com/resources/documentation/windows/xp/all/proddocs/en-us/doskey.mspx?mfr=true) for additional details on complex aliases/macros for `cmd.exe`
+Cmd.exe aliases can also be more complex. See: [DOSKEY.EXE documentation](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/doskey) for additional details on complex aliases/macros for `cmd.exe`
 
-Aliases defined using the `alias.bat` command will automatically be saved in the `%CMDER_ROOT%\config\user-aliases.cmd` file
+Aliases defined using the `alias.bat` command will automatically be saved in the `%CMDER_ROOT%\config\user_aliases.cmd` file
 
 To make an alias and/or any other profile settings permanent add it to one of the following:
 
 Note: These are loaded in this order by `$CMDER_ROOT/vendor/init.bat`.  Anything stored in `%CMDER_ROOT%` will be a portable setting and will follow cmder to another machine.
 
 * `%CMDER_ROOT%\config\profile.d\*.cmd` and `\*.bat`
-* `%CMDER_ROOT%\config\user-aliases.cmd`
+* `%CMDER_ROOT%\config\user_aliases.cmd`
 * `%CMDER_ROOT%\config\user_profile.cmd`
 
 #### Bash.exe|Mintty.exe Aliases
@@ -252,7 +278,7 @@ Uncomment and edit the below line in the script to use Cmder config even when la
 # CMDER_ROOT=${USERPROFILE}/cmder  # This is not required if launched from Cmder.
 ```
 
-### Customizing user sessions using `init.bat` custom arguments. 
+### Customizing user sessions using `init.bat` custom arguments.
 
 You can pass custom arguments to `init.bat` and use `cexec.cmd` in your `user_profile.cmd` to evaluate these
 arguments then execute commands based on a particular flag being detected or not.
@@ -263,7 +289,7 @@ arguments then execute commands based on a particular flag being detected or not
 
 ```
 ccall=call C:\Users\user\cmderdev\vendor\bin\cexec.cmd
-```  
+```
 
 Example: `%ccall% /startnotepad start notepad.exe`
 
@@ -285,17 +311,17 @@ To conditionally start `notepad.exe` when you start a specific `cmder` task:
 * Add the below to the `Commands` block:
 
   ```batch
-  
+
   cmd.exe /k ""%ConEmuDir%\..\init.bat" /startnotepad"
-  
+
   ```
 
 * Add the below to your `%cmder_root%\config\user_profile.cmd`
 
   ```batch
-  
+
   %ccall% "/startNotepad" "start" "notepad.exe"`
-  
+
   ```
 
 To see detailed usage of `cexec`, type `cexec /?` in cmder.
